@@ -1,0 +1,22 @@
+<!-- views/transaction.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Transaction</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>Détails de la Transaction</h1>
+    </header>
+    <main>
+        <p>Hash : <%= transaction.hash %></p>
+        <p>De : <%= transaction.from %></p>
+        <p>À : <%= transaction.to %></p>
+        <p>Montant : <%= web3.utils.fromWei(transaction.value, 'ether') %> ETH</p>
+        <a href="/">Retour à l'accueil</a>
+    </main>
+</body>
+</html>

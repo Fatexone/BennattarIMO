@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+}
+
+header {
+    background-color: rgba(0, 51, 102, 0.8);
+    color: #fff;
+    padding: 1em;
+    width: 100%;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 500;
+}
+
+main {
+    padding: 2em;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+button {
+    margin: 0.5em;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #003366;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #002244;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+form label, form input, form textarea {
+    margin: 0.5em 0;
+    width: 100%;
+}
+
+form input, form textarea {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    align-self: center;
+    background-color: #0055a5;
+}
+
+.slider {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    height: 300px; /* Réduire la hauteur maximale des images */
+    margin-bottom: 2em;
+}
+
+.slider img {
+    width: 100%;
+    height: 200px !important; /* Utilisez !important pour forcer le style */
+    object-fit: cover;
+    max-height: 200px;
+}
+
+.intro, .steps, .contact-form, .contact-info, .services-list, .team, .blockchain-info {
+    margin: 2rem 0;
+}
+
+.intro p, .services-list ul, .team ul, .blockchain-info ul {
+    text-align: left;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.intro p, .blockchain-info p {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+.services-list ul, .team ul, .blockchain-info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.services-list ul li, .team ul li, .blockchain-info ul li {
+    padding: 0.5em 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.contact-info p {
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+.property {
+    margin: 1em 0;
+}
+
+.property img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.property p {
+    margin: 0.5em 0;
+    font-size: 1.1em;
+}
+
+.return-button {
+    display: inline-block;
+    margin-top: 2em;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    font-weight: 500;
+    background-color: #003366;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.return-button:hover {
+    background-color: #002244;
+}
+
+@media (min-width: 768px) {
+    .slider img {
+        height: 300px; /* Ajustement de la hauteur pour les écrans plus grands */
+    }
+
+    .intro p, .blockchain-info p {
+        font-size: 1.4em;
+    }
+
+    .property {
+        display: flex;
+        align-items: center;
+    }
+
+    .property img {
+        width: 40%;
+        margin-right: 1em;
+    }
+
+    .property p {
+        width: 60%;
+    }
+}
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    background-color: rgba(0, 51, 102, 0.8);
+}
+
+nav ul li {
+    margin: 0 1em;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+nav ul li a:hover {
+    color: #ffd700;
+}
+
+footer {
+    margin-top: 2em;
+    text-align: center;
+}
+
+footer .return-button {
+    display: inline-block;
+    margin: 0.5em;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    font-weight: 500;
+    background-color: #003366;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+footer .return-button:hover {
+    background-color: #002244;
+}

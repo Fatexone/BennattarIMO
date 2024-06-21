@@ -1,0 +1,133 @@
+<%- include('header') %>
+
+<main>
+    <header>
+        <h1><%= property.title %></h1>
+    </header>
+    <section class="property-details">
+        <p><strong>Adresse :</strong> <%= property.address %></p>
+        <p><strong>Prix :</strong> <%= property.price %></p>
+        <p><strong>Prix moyen au m² :</strong> <%= property.avgPrice %></p>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+    </section>
+    <section class="map-controls">
+        <h2>Afficher sur la carte :</h2>
+        <button onclick="showPlaces('school')">Écoles</button>
+        <button onclick="showPlaces('gym')">Salles de sport</button>
+        <button onclick="showPlaces('church')">Lieux de culte</button>
+        <button onclick="showPlaces('subway_station')">Stations de métro</button>
+        <button onclick="showPlaces('supermarket')">Supermarchés</button>
+    </section>
+</main>
+
+<%- include('footer') %>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcq0Gvpuaab4UMMkdC6nzg83E0Jv7KuXE&libraries=places,directions"></script>
+<script>
+    var map;
+    var service;
+    var infowindow;
+    var markers = [];
+    var directionsService;
+    var directionsRenderer;
+    var propertyLocation = JSON.parse('<%- JSON.stringify({ lat: property.lat, lng: property.lng }) %>');
+    var propertyMarker;
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: propertyLocation,
+            zoom: 15
+        });
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        propertyMarker = new google.maps.Marker({
+            position: propertyLocation,
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#FF0000',
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: '#FFFFFF',
+            },
+            animation: google.maps.Animation.BOUNCE
+        });
+
+        markers.push(propertyMarker);
+    }
+
+    function showPlaces(type) {
+        clearMarkers();
+        propertyMarker.setMap(map);  // Re-add property marker to map
+        var request = {
+            location: propertyLocation,
+            radius: '1000',
+            type: [type]
+        };
+
+        service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, function(results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < results.length; i++) {
+                    createMarker(results[i]);
+                }
+            }
+        });
+    }
+
+    function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            icon: {
+                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                scale: 5,
+                fillColor: '#0000FF',
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: '#FFFFFF',
+            }
+        });
+
+        markers.push(marker);
+
+        google.maps.event.addListener(marker, 'click', function() {
+            calculateAndDisplayRoute(place);
+        });
+    }
+
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+        directionsRenderer.set('directions', null);
+    }
+
+    function calculateAndDisplayRoute(place) {
+        directionsService.route(
+            {
+                origin: propertyLocation,
+                destination: place.geometry.location,
+                travelMode: 'DRIVING'
+            },
+            function(response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                    var distance = response.routes[0].legs[0].distance.text;
+                    var duration = response.routes[0].legs[0].duration.text;
+                    alert('Nom: ' + place.name + '\nAdresse: ' + place.vicinity + '\nDistance: ' + distance + '\nDurée: ' + duration);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            }
+        );
+    }
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+</script>
