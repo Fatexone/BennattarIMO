@@ -1,37 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction Blockchain - Benattar Immobilier</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-    <header>
-        <h1>Transaction Blockchain</h1>
-    </header>
-    <nav>
+<%- include('header') %>
+<main>
+    <section class="blockchain-info">
+        <h1>Transactions Blockchain</h1>
+        <p>Découvrez comment une transaction immobilière peut être réalisée via la blockchain. Voici un exemple concret pour vous aider à comprendre le processus :</p>
+
+        <h2>Exemple de Transaction</h2>
+        <p>Imaginons que vous souhaitiez acheter une propriété à Paris. Voici les étapes que nous suivons en utilisant la technologie blockchain :</p>
+        <ol>
+            <li><strong>Recherche de la Propriété:</strong> Vous trouvez la propriété de vos rêves sur notre plateforme.</li>
+            <li><strong>Négociation et Accord:</strong> Une fois que vous avez négocié et trouvé un accord avec le vendeur, les détails de la transaction sont enregistrés dans un contrat intelligent sur la blockchain.</li>
+            <li><strong>Vérification des Documents:</strong> Tous les documents légaux et les informations de propriété sont vérifiés et stockés de manière sécurisée sur la blockchain.</li>
+            <li><strong>Transfert de Fonds:</strong> Les fonds sont transférés via une transaction sécurisée sur la blockchain, éliminant le besoin d'intermédiaires coûteux.</li>
+            <li><strong>Transfert de Propriété:</strong> Une fois le paiement confirmé, la propriété est automatiquement transférée à votre nom dans le registre public de la blockchain.</li>
+            <li><strong>Confirmation Finale:</strong> Vous recevez une confirmation numérique et immuable de votre nouvelle propriété.</li>
+        </ol>
+
+        <h2>Avantages</h2>
         <ul>
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/about">À Propos</a></li>
-            <li><a href="/services">Services</a></li>
-            <li><a href="/properties">Biens Immobiliers</a></li>
-            <li><a href="/news">Actualités</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><strong>Transparence:</strong> Toutes les étapes de la transaction sont enregistrées de manière transparente sur la blockchain.</li>
+            <li><strong>Sécurité:</strong> La technologie blockchain garantit que toutes les informations sont sécurisées et non altérables.</li>
+            <li><strong>Rapidité:</strong> Les transactions peuvent être réalisées beaucoup plus rapidement qu'avec les méthodes traditionnelles.</li>
+            <li><strong>Réduction des Coûts:</strong> En éliminant les intermédiaires, vous pouvez économiser jusqu'à 20% sur les frais de transaction.</li>
         </ul>
-    </nav>
-    <main>
-        <section class="info">
-            <h2>Pourquoi utiliser la Blockchain pour les Transactions Immobilières?</h2>
-            <p>La technologie Blockchain offre plusieurs avantages pour les transactions immobilières :</p>
-            <ul>
-                <li><strong>Transparence :</strong> Chaque transaction est enregistrée dans un registre public, accessible à tous, garantissant une transparence totale.</li>
-                <li><strong>Économie de temps :</strong> Les transactions sont traitées en quelques minutes au lieu de plusieurs jours grâce à l'automatisation des contrats intelligents.</li>
-                <li><strong>Réduction des coûts :</strong> Moins d'intermédiaires signifie des coûts de transaction plus bas.</li>
-                <li><strong>Sécurité :</strong> Les transactions sont cryptées et immuables, réduisant les risques de fraude.</li>
-            </ul>
-            <p>En utilisant la Blockchain, nos clients peuvent économiser jusqu'à 20% sur les frais de transaction et réduire de moitié le temps nécessaire à la finalisation de la vente.</p>
-        </section>
-    </main>
-</body>
-</html>
+
+        <h2>Estimation des Économies</h2>
+        <p>En utilisant la blockchain, vous pouvez économiser jusqu'à 20% sur les frais de transaction. Cela est possible grâce à la réduction des intermédiaires et à l'efficacité accrue du processus.</p>
+
+        <button class="contact-button" onclick="openContactModal()">Je suis intéressé par une transaction blockchain</button>
+    </section>
+
+    <!-- Modal de contact -->
+    <div id="contactModal" class="modal" style="display: none;">
+        <span class="close" onclick="closeContactModal()">&times;</span>
+        <div class="modal-content">
+            <h2>Contactez-nous pour une transaction blockchain</h2>
+            <form action="/contact-blockchain" method="POST">
+                <div>
+                    <label for="name">Nom:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <div>
+                    <button type="submit">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<%- include('footer') %>
+
+<style>
+    /* Ajouter les styles de la page ici */
+    .contact-button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .contact-button:hover {
+        background-color: #0056b3;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 700px;
+        border-radius: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function openContactModal() {
+        document.getElementById('contactModal').style.display = 'block';
+    }
+
+    function closeContactModal() {
+        document.getElementById('contactModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        var modal = document.getElementById('contactModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>

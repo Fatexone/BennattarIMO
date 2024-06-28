@@ -1,20 +1,203 @@
 <%- include('header') %>
-
 <main>
-    <header>
+    <section class="properties-section">
         <h1>Biens Immobiliers</h1>
-    </header>
-    <section class="properties">
-        <h2>Nos Propriétés</h2>
-        <p>Voici quelques-unes de nos propriétés disponibles :</p>
-        <ul>
-            <% properties.forEach(property => { %>
-                <li>
-                    <a href="/property/<%= property.id %>"><%= property.title %> - <%= property.address %></a>
-                </li>
+        <div class="properties-container">
+            <% properties.forEach(function(property) { %>
+                <div class="property-card">
+                    <h2><a href="/property/<%= property.id %>"><%= property.title %> - <%= property.address %></a></h2>
+                    <p class="property-price"><%= property.price %></p>
+                    <button class="photo-button" data-property-id="<%= property.id %>">Voir les photos</button>
+                </div>
             <% }); %>
-        </ul>
+        </div>
     </section>
 </main>
-
 <%- include('footer') %>
+
+<!-- Modales pour les photos -->
+<% properties.forEach(function(property) { %>
+    <div id="photoModal<%= property.id %>" class="modal">
+        <span class="close" data-property-id="<%= property.id %>">&times;</span>
+        <div class="modal-content">
+            <% property.photos.forEach(function(photo) { %>
+                <img src="/images/property<%= property.id %>/<%= photo %>" class="property-photo">
+            <% }); %>
+        </div>
+    </div>
+<% }); %>
+
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .properties-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .properties-section h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .properties-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .property-card {
+        background: #fff;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        text-align: center;
+        flex-basis: calc(33.333% - 40px);
+        box-sizing: border-box;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .property-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .property-card h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .property-card h2 a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s ease;
+    }
+
+    .property-card h2 a:hover {
+        color: #f7941d;
+    }
+
+    .property-price {
+        font-size: 1.2em;
+        color: #666;
+        margin-bottom: 15px;
+        font-family: 'Open Sans', serif;
+    }
+
+    .photo-button {
+        background-color: #f7941d;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .photo-button:hover {
+        background-color: #e68317;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .property-photo {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .property-card {
+            flex-basis: calc(50% - 40px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .property-card {
+            flex-basis: calc(100% - 40px);
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const photoButtons = document.querySelectorAll('.photo-button');
+        const modals = document.querySelectorAll('.modal');
+        const closes = document.querySelectorAll('.close');
+
+        photoButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const propertyId = this.getAttribute('data-property-id');
+                document.getElementById(`photoModal${propertyId}`).style.display = 'block';
+            });
+        });
+
+        closes.forEach(close => {
+            close.addEventListener('click', function () {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', function (event) {
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>

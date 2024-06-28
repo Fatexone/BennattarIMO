@@ -1,21 +1,22 @@
 {
-  "name": "benattar",
+  "name": "benattar2",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Projet pour tester localement",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.10",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.6",
     "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "nodemailer": "^6.9.14",
+    "path": "^0.12.7",
     "rss-parser": "^3.13.0",
-    "web3": "^1.5.2"
+    "web3": "^4.10.0"
   },
-  "devDependencies": {
-    "ejs-lint": "^2.0.0"
-  }
+  "author": "Brice Faradji",
+  "license": "ISC"
 }

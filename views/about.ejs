@@ -1,21 +1,229 @@
 <%- include('header') %>
 <main>
-    <header>
-        <h1>À Propos</h1>
-    </header>
-    <section class="intro">
-        <h2>Présentation de l'Agent Immobilier</h2>
-        <p>Avec 30 ans d'expérience dans le secteur immobilier, nous offrons des services d'expertise, de tutelle et de succession en Île-de-France.</p>
-    </section>
-    <section class="team">
+    <section class="about-us">
+        <h1>À propos de nous</h1>
+    
+        <div class="about-text">
+            <p class="history-text">
+                Alexandre BENNATAR, fondateur de Benattar Immobilier, est un homme de 60 ans passionné de philosophie et de lecture. Le nom "BENNATAR" signifie "fils d'épicier" en arabe, rappelant ses racines modestes et son éthique de travail acharné. Après avoir consacré 30 ans de sa vie au secteur immobilier, Alexandre a fondé Benattar Immobilier pour offrir des services immobiliers de qualité, basés sur la confiance et l'expertise.
+            </p>
+        </div>
+
+        <h2>Nos Compétences</h2>
+        <div class="skills-container">
+            <ul class="skills-list">
+                <li><strong>Estimation Précise des Biens Immobiliers :</strong> Grâce à notre connaissance approfondie du marché immobilier et à notre expertise en évaluation, nous fournissons des estimations précises et fiables pour vos biens immobiliers.</li>
+                <li><strong>Mises en Vente Efficaces :</strong> Nous gérons le processus de vente de bout en bout, en mettant en place des stratégies de marketing ciblées pour maximiser la visibilité et l'attractivité de vos biens.</li>
+                <li><strong>Rapports avec les Notaires et les Mairies :</strong> Nous entretenons des relations étroites avec les notaires de province et les mairies, facilitant ainsi le traitement des dossiers de succession.</li>
+                <li><strong>Gestion des Problèmes Juridiques et Administratifs :</strong> Nous sommes équipés pour gérer tous les problèmes juridiques et administratifs qui peuvent survenir dans un dossier immobilier.</li>
+                <li><strong>Accompagnement Personnalisé :</strong> Nous croyons en un service personnalisé, adapté à chaque client. Nous vous accompagnons à chaque étape du processus, offrant des conseils et un soutien continus.</li>
+            </ul>
+        </div>
+
         <h2>Notre Équipe</h2>
-        <ul>
-            <li>Nom du collaborateur 1 - Rôle</li>
-            <li>Nom du collaborateur 2 - Rôle</li>
-            <li>Nom du collaborateur 3 - Rôle</li>
-            <li>Nom du collaborateur 4 - Rôle</li>
-            <li>Nom du collaborateur 5 - Rôle</li>
-        </ul>
+        <div class="team">
+            <div class="team-member">
+                <img src="/images/alexandre-bennatar.jpg" alt="Alexandre Bennatar">
+                <h3>Alexandre Bennatar</h3>
+                <h4>Directeur</h4>
+                <p>Alexandre Bennatar, avec ses 30 ans d'expérience, est le fondateur de Benattar Immobilier. Passionné de philosophie et de lecture, il a dédié sa vie à offrir des services immobiliers de qualité basés sur la confiance et l'expertise.</p>
+            </div>
+            <div class="team-member">
+                <img src="/images/collaborator1.jpg" alt="Collaborateur 1">
+                <h3>Nom du collaborateur 1</h3>
+                <h4>Rôle</h4>
+                <p>Collaborateur 1 est un expert en [spécialité], avec [nombre] ans d'expérience dans [secteur]. Il/Elle a rejoint Benattar Immobilier pour apporter son expertise et sa passion pour [domaine spécifique].</p>
+            </div>
+            <div class="team-member">
+                <img src="/images/collaborator2.jpg" alt="Collaborateur 2">
+                <h3>Nom du collaborateur 2</h3>
+                <h4>Rôle</h4>
+                <p>Collaborateur 2 est reconnu(e) pour son approche innovante dans [domaine]. Avec une formation en [formation], il/elle s'assure que nos clients reçoivent les meilleurs conseils et services possibles.</p>
+            </div>
+            <div class="team-member">
+                <img src="/images/collaborator3.jpg" alt="Collaborateur 3">
+                <h3>Nom du collaborateur 3</h3>
+                <h4>Rôle</h4>
+                <p>Collaborateur 3, avec une expérience de [nombre] ans en [secteur], est dévoué(e) à aider nos clients à trouver la propriété parfaite. Son expertise en [spécialité] est un atout majeur pour notre équipe.</p>
+            </div>
+            <div class="team-member">
+                <img src="/images/collaborator4.jpg" alt="Collaborateur 4">
+                <h3>Nom du collaborateur 4</h3>
+                <h4>Rôle</h4>
+                <p>Collaborateur 4, spécialiste en [domaine], apporte une perspective unique grâce à son background en [formation]. Il/Elle est passionné(e) par [domaine] et travaille sans relâche pour nos clients.</p>
+            </div>
+            <div class="team-member">
+                <img src="/images/collaborator5.jpg" alt="Collaborateur 5">
+                <h3>Nom du collaborateur 5</h3>
+                <h4>Rôle</h4>
+                <p>Collaborateur 5 est un professionnel expérimenté en [secteur], avec une passion pour [domaine spécifique]. Son approche centrée sur le client garantit une expérience exceptionnelle à chaque transaction.</p>
+            </div>
+        </div>
     </section>
 </main>
 <%- include('footer') %>
+
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .about-us {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .about-us h1, .about-us h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .about-us h1 {
+        font-size: 2.5em;
+    }
+
+    .about-us h2 {
+        font-size: 2em;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    .about-text {
+        background: #f0f0f0;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+    }
+
+    .about-text p {
+        font-size: 1.1em;
+        line-height: 1.8em;
+        text-align: center;
+        color: #333;
+    }
+
+    .skills-container {
+        background: #e0e0e0;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+    }
+
+    .skills-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .skills-list li {
+        font-size: 1.1em;
+        line-height: 1.6em;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .skills-list li strong {
+        color: #333;
+    }
+
+    .team {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .team-member {
+        background: #fff;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        text-align: center;
+        flex-basis: calc(33.333% - 40px);
+        box-sizing: border-box;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .team-member:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .team-member img {
+        max-width: 100%;
+        border-radius: 50%;
+        margin-bottom: 15px;
+    }
+
+    .team-member h3 {
+        margin-top: 0;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .team-member h4 {
+        color: #666;
+        font-weight: normal;
+        font-family: 'Montserrat', sans-serif;
+        margin-bottom: 10px;
+    }
+
+    .team-member p {
+        font-size: 0.95em;
+        color: #555;
+        font-family: 'Open Sans', serif;
+        line-height: 1.6em;
+    }
+
+    @media (max-width: 768px) {
+        .team-member {
+            flex-basis: calc(50% - 40px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .team-member {
+            flex-basis: calc(100% - 40px);
+        }
+    }
+
+    .about-us h1::after, .about-us h2::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: #f7941d;
+        margin: 10px auto 0;
+    }
+
+    .team-member h3 {
+        position: relative;
+    }
+
+    .team-member h3::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 2px;
+        background: #f7941d;
+        margin: 8px auto 0;
+    }
+
+    .team-member p {
+        text-align: justify;
+    }
+</style>

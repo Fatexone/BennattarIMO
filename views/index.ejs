@@ -8,13 +8,28 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/images/image1-2.jpg" class="d-block w-100" alt="Property 1">
+                <img src="http://localhost:3000/images/image1-2.jpg" class="d-block w-100 carousel-image" alt="Property 1">
+                <div class="carousel-caption">
+                    <img src="http://localhost:3000/images/logo1.png" class="carousel-logo" alt="Logo 1">
+                    <h5>Bienvenue chez Benattar Immobilier</h5>
+                    <p>Votre partenaire de confiance en immobilier.</p>
+                </div>
             </div>
             <div class="carousel-item">
-                <img src="/images/image2-2.jpg" class="d-block w-100" alt="Property 2">
+                <img src="http://localhost:3000/images/image2-2.jpg" class="d-block w-100 carousel-image" alt="Property 2">
+                <div class="carousel-caption">
+                    <img src="http://localhost:3000/images/logo2.png" class="carousel-logo" alt="Logo 2">
+                    <h5>30 ans d'expertise en immobilier</h5>
+                    <p>Des services personnalisés pour vos besoins immobiliers.</p>
+                </div>
             </div>
             <div class="carousel-item">
-                <img src="/images/image3-2.jpg" class="d-block w-100" alt="Property 3">
+                <img src="http://localhost:3000/images/image3-2.jpg" class="d-block w-100 carousel-image" alt="Property 3">
+                <div class="carousel-caption">
+                    <img src="http://localhost:3000/images/logo3.png" class="carousel-logo" alt="Logo 3">
+                    <h5>Services de tutelle et de succession</h5>
+                    <p>Nous vous accompagnons à chaque étape.</p>
+                </div>
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -26,8 +41,71 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-    <section class="intro">
-        <p>Avec 30 ans d'expérience dans le secteur immobilier, nous offrons des services d'expertise, de tutelle et de succession en Île-de-France.</p>
-    </section>
 </main>
 <%- include('footer') %>
+
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .carousel-image {
+        height: 500px; /* Adjusted height for a more prominent display */
+        object-fit: cover;
+    }
+
+    .carousel-caption {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+    }
+
+    .carousel-logo {
+        width: 60px;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .carousel-caption h5 {
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 1.5em;
+        margin: 0;
+    }
+
+    .carousel-caption p {
+        color: #fff;
+        margin: 5px 0 0;
+        font-size: 1.1em;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .carousel-indicators li {
+        background-color: #007bff;
+    }
+
+    .carousel-indicators .active {
+        background-color: #0056b3;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: #007bff;
+        border-radius: 50%;
+        padding: 10px;
+    }
+
+    .carousel-control-prev-icon:hover,
+    .carousel-control-next-icon:hover {
+        background-color: #0056b3;
+    }
+</style>

@@ -1,8 +1,9 @@
-const express = require('express');
-const path = require('path');
-const Web3 = require('web3');
-const bodyParser = require('body-parser');
-const RSSParser = require('rss-parser');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import Web3 from 'web3';
+import bodyParser from 'body-parser';
+import RSSParser from 'rss-parser';
 
 const rssParser = new RSSParser();
 
@@ -15,6 +16,10 @@ console.log(`Web3 version: ${web3.version}`);
 // Configuration d'Express
 const app = express();
 app.set('view engine', 'ejs');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,21 +1,132 @@
 <%- include('header') %>
 <main>
-    <section class="news">
+    <section class="news-section">
         <h1>Actualités</h1>
-        <% if (message) { %>
-            <p><%= message %></p>
-        <% } else if (articles.length > 0) { %>
-            <ul>
-                <% articles.forEach(article => { %>
-                    <li>
+        <div class="news-container">
+            <% if (articles && articles.length > 0) { %>
+                <% articles.forEach(function(article) { %>
+                    <div class="news-card">
                         <h2><a href="<%= article.link %>" target="_blank"><%= article.title %></a></h2>
-                        <p><%= article.contentSnippet %></p>
-                    </li>
-                <% }) %>
-            </ul>
-        <% } else { %>
-            <p>Aucun article disponible pour le moment.</p>
-        <% } %>
+                        <p class="news-date"><%= new Date(article.isoDate).toLocaleDateString() %></p>
+                        <p class="news-description"><%= article.contentSnippet %></p>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Aucune actualité disponible pour le moment.</p>
+            <% } %>
+        </div>
     </section>
 </main>
 <%- include('footer') %>
+
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .news-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .news-section h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .news-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .news-card {
+        background: #fff;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        text-align: center;
+        flex-basis: calc(33.333% - 40px);
+        box-sizing: border-box;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .news-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .news-card h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .news-card h2 a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s ease;
+    }
+
+    .news-card h2 a:hover {
+        color: #f7941d;
+    }
+
+    .news-date {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 10px;
+        font-family: 'Open Sans', serif;
+    }
+
+    .news-description {
+        font-size: 1em;
+        color: #555;
+        font-family: 'Open Sans', serif;
+        line-height: 1.6em;
+    }
+
+    @media (max-width: 768px) {
+        .news-card {
+            flex-basis: calc(50% - 40px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .news-card {
+            flex-basis: calc(100% - 40px);
+        }
+    }
+
+    .news-section h1::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: #f7941d;
+        margin: 10px auto 0;
+    }
+
+    .news-card h2::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 2px;
+        background: #f7941d;
+        margin: 8px auto 0;
+    }
+</style>
