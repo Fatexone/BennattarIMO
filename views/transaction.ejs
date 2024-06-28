@@ -12,11 +12,13 @@
         <h1>Détails de la Transaction</h1>
     </header>
     <main>
-        <p>Hash : <%= transaction.hash %></p>
-        <p>De : <%= transaction.from %></p>
-        <p>À : <%= transaction.to %></p>
-        <p>Montant : <%= web3.utils.fromWei(transaction.value, 'ether') %> ETH</p>
-        <a href="/">Retour à l'accueil</a>
+        <section class="transaction-details">
+            <p><strong>Hash :</strong> <%= transaction.hash %></p>
+            <p><strong>De :</strong> <%= transaction.from %></p>
+            <p><strong>À :</strong> <%= transaction.to %></p>
+            <p><strong>Montant :</strong> <%= web3.utils.fromWei(transaction.value, 'ether') %> ETH</p>
+            <a href="/" class="btn">Retour à l'accueil</a>
+        </section>
     </main>
 </body>
 </html>

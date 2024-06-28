@@ -1,4 +1,11 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
+import express from 'express';
+import path from 'path';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import RSSParser from 'rss-parser';
+
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -8,20 +15,14 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-require('dotenv').config();
-const RSSParser = require('rss-parser');
-
 const app = express();
 const port = 3000;
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(process.cwd(), 'views'));
+app.use(express.static(path.join(process.cwd(), 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
+
 
 const properties = [
     {

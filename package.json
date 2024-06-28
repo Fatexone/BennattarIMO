@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Projet pour tester localement",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
