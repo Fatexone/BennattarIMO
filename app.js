@@ -1,104 +1,261 @@
+import { requireLogin } from './middlewares/authMiddleware.js';
+import cors from 'cors';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Web3 from 'web3';
-import bodyParser from 'body-parser';
-import RSSParser from 'rss-parser';
+import session from 'express-session';
+import mongoose from 'mongoose';
+import flash from 'connect-flash';
+import dotenv from 'dotenv';
+import methodOverride from 'method-override';
+import MongoStore from 'connect-mongo';
+import multer from 'multer';
+import fs from 'fs';
+import AWS from 'aws-sdk';
+import adminRoutes from './routes/adminRoutes.js';
+import clientRoutes from './routes/clientRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import fetchRSSFeeds from './utils/fetchRSSFeeds.js';
 
-const rssParser = new RSSParser();
+// Charger les variables d'environnement
+dotenv.config();
 
-// Initialisation correcte de Web3 avec Infura
-const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/2619645d5aa24f27ab30f8f0d6a70326'));
-
-// Vérification de la version de Web3
-console.log(`Web3 version: ${web3.version}`);
-
-// Configuration d'Express
+// Créer une application Express
 const app = express();
-app.set('view engine', 'ejs');
+const port = process.env.PORT || 3000;
 
+// Déterminer le chemin absolu du dossier courant
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.set('views', path.join(__dirname, 'views'));
+
+// Connexion à MongoDB
+const isProduction = process.env.NODE_ENV === 'production'; // Détecte si on est en production
+
+// Utilise l'URI de MongoDB en fonction de l'environnement (local ou production)
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/benattar';
+
+
+
+
+// Connexion à MongoDB
+mongoose.connect(mongoURI, {
+    serverSelectionTimeoutMS: 5000, // Timeout pour la sélection du serveur
+    socketTimeoutMS: 45000, // Timeout pour les connexions
+})
+    .then(() => {
+        console.log(`Connected to MongoDB (${isProduction ? 'Production' : 'Local'})`);
+    })
+    .catch(error => {
+        console.error('MongoDB connection error:', error.message);
+        process.exit(1); // Arrête l'application si la connexion échoue
+    });
+
+
+
+
+
+
+    // Configuration AWS S3
+    const s3 = new AWS.S3({
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: process.env.AWS_REGION || 'eu-north-1', // Spécifiez explicitement la région
+    });
+    
+
+
+// Fonction pour déterminer si on utilise S3 ou le stockage local
+const useS3 = process.env.USE_S3 === 'true';
+
+// Configuration de Multer pour le stockage local
+const storageLocal = multer.diskStorage({
+    destination: (req, file, cb) => {
+        let folder = 'public/uploads/';
+        if (file.fieldname === 'photos') {
+            folder += 'photos/';
+        } else if (file.fieldname === 'videos') {
+            folder += 'videos/';
+        }
+        if (!fs.existsSync(folder)) {
+            fs.mkdirSync(folder, { recursive: true });
+        }
+        cb(null, folder);
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+
+// Middleware Multer pour le téléchargement de fichiers
+const storage = useS3 ? multer.memoryStorage() : storageLocal;
+const upload = multer({ storage });
+
+// Fonction pour uploader un fichier vers S3 (mise à jour sans ACL)
+const uploadToS3 = (file, folder) => {
+    const params = {
+        Bucket: process.env.S3_BUCKET_NAME, // Le nom du bucket
+        Key: `${folder}/${Date.now()}-${file.originalname}`, // Chemin et nom de fichier sur S3
+        Body: file.buffer,
+        ContentType: file.mimetype // Spécifier le type de fichier
+    };
+    return s3.upload(params).promise(); // Upload vers S3
+};
+
+
+// Configurer les sessions
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+   
+   
+    cookie: {
+        secure: true,  // Les cookies ne seront envoyés que via HTTPS
+        httpOnly: true,  // Bloque l'accès aux cookies depuis le JavaScript côté client
+        maxAge: 1000 * 60 * 60 * 24,  // 1 jour
+        sameSite: 'lax',  // Protection contre les attaques CSRF
+    }
+    
+
+
+}));
+
+
+
+
+
+app.use((req, res, next) => {
+    console.log('Session:', req.session);
+    next();
+});
+
+
+
+// Configurer les options CORS
+const corsOptions = {
+    origin: process.env.NODE_ENV === 'production' ? 'https://www.alexandrebenattar.com' : 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
+
+
+
+app.use(methodOverride('_method'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Liste des propriétés
-const properties = [
-    { id: 1, title: "Appartement de luxe", address: "123 Rue de Rivoli, Paris", lat: 48.8606, lng: 2.3376, price: "1,200,000 €", avgPrice: "12,000 €/m²" },
-    { id: 2, title: "Maison familiale", address: "45 Avenue des Champs-Élysées, Paris", lat: 48.8566, lng: 2.3522, price: "2,300,000 €", avgPrice: "15,000 €/m²" },
-    { id: 3, title: "Studio moderne", address: "78 Boulevard Saint-Germain, Paris", lat: 48.8575, lng: 2.3531, price: "450,000 €", avgPrice: "10,500 €/m²" },
-    { id: 4, title: "Duplex spacieux", address: "32 Rue de la Paix, Paris", lat: 48.8681, lng: 2.3303, price: "3,200,000 €", avgPrice: "14,000 €/m²" },
-    { id: 5, title: "Villa avec jardin", address: "12 Rue des Rosiers, Saint-Ouen", lat: 48.9109, lng: 2.3408, price: "980,000 €", avgPrice: "8,000 €/m²" },
-    { id: 6, title: "Loft industriel", address: "56 Quai de Jemmapes, Paris", lat: 48.8758, lng: 2.3624, price: "1,500,000 €", avgPrice: "11,000 €/m²" },
-    { id: 7, title: "Penthouse avec vue", address: "24 Rue de la Boétie, Paris", lat: 48.8708, lng: 2.3095, price: "4,000,000 €", avgPrice: "16,000 €/m²" },
-    { id: 8, title: "Maison de charme", address: "7 Rue de Passy, Paris", lat: 48.8575, lng: 2.2768, price: "2,100,000 €", avgPrice: "13,000 €/m²" },
-    { id: 9, title: "Appartement cosy", address: "15 Rue de la Huchette, Paris", lat: 48.8527, lng: 2.3470, price: "600,000 €", avgPrice: "9,000 €/m²" },
-    { id: 10, title: "Maison de ville", address: "3 Rue Mouffetard, Paris", lat: 48.8422, lng: 2.3509, price: "1,800,000 €", avgPrice: "12,500 €/m²" }
-];
 
-// Route principale
-app.get('/', (req, res) => res.render('index'));
 
-// Route pour les transactions Blockchain
-app.get('/blockchain', async (req, res) => {
-    try {
-        const blockNumber = await web3.eth.getBlockNumber();
-        res.render('blockchain', { message: `Le numéro de bloc actuel est ${blockNumber}` });
-    } catch (error) {
-        res.render('blockchain', { message: `Erreur : ${error.message}` });
+
+// Middleware unique pour les messages flash, logs et Google Maps API Key
+app.use((req, res, next) => {
+    res.locals.googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg') || '';
+    res.locals.error = req.flash('error');
+    console.log(`Request URL: ${req.url}`);
+    next();
+});
+
+
+
+
+
+
+// Routes de l'application
+app.use(authRoutes);
+app.use('/admin', requireLogin, adminRoutes);
+app.use('/', clientRoutes);
+
+// Route pour uploader une photo
+app.post('/upload/photo', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Aucun fichier uploadé.');
     }
-});
 
-// Route pour les transactions traditionnelles
-app.get('/traditional', (req, res) => res.render('traditional'));
-
-// Route pour afficher les détails des transactions
-app.get('/transaction/:hash', async (req, res) => {
-    try {
-        const hash = req.params.hash;
-        const transaction = await web3.eth.getTransaction(hash);
-        res.render('transaction', { transaction });
-    } catch (error) {
-        res.send(`Erreur : ${error.message}`);
-    }
-});
-
-// Routes pour les pages À Propos, Services, Biens Immobiliers, Actualités et Contact
-app.get('/about', (req, res) => res.render('about'));
-app.get('/services', (req, res) => res.render('services'));
-app.get('/properties', (req, res) => res.render('properties', { properties }));
-
-app.get('/news', async (req, res) => {
-    try {
-        const feed = await rssParser.parseURL('https://www.lemonde.fr/immobilier/rss_full.xml');
-        res.render('news', { articles: feed.items, message: null });
-    } catch (error) {
-        res.render('news', { articles: [], message: `Erreur : ${error.message}` });
-    }
-});
-
-app.get('/contact', (req, res) => res.render('contact'));
-
-// Route pour gérer l'envoi du formulaire de contact
-app.post('/send-message', (req, res) => {
-    const { name, email, message } = req.body;
-    console.log(`Message reçu de ${name} (${email}): ${message}`);
-    res.send('Merci pour votre message. Nous vous contacterons bientôt.');
-});
-
-// Route pour afficher les détails d'une propriété
-app.get('/property/:id', (req, res) => {
-    const propertyId = parseInt(req.params.id, 10);
-    const property = properties.find(p => p.id === propertyId);
-    if (property) {
-        res.render('property', { property });
+    if (useS3) {
+        try {
+            const result = await uploadToS3(req.file, 'photos');
+            return res.send({ fileUrl: result.Location, message: 'Photo uploadée avec succès sur S3' });
+        } catch (error) {
+            console.error('Erreur lors de l\'upload sur S3:', error);
+            return res.status(500).send('Erreur lors de l\'upload');
+        }
     } else {
-        res.status(404).send('Propriété non trouvée');
+        return res.send({ fileUrl: `/uploads/photos/${req.file.filename}`, message: 'Photo uploadée localement' });
     }
 });
 
-// Démarrer le serveur
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+// Route pour uploader une vidéo
+app.post('/upload/video', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Aucun fichier uploadé.');
+    }
+
+    if (useS3) {
+        try {
+            const result = await uploadToS3(req.file, 'videos');
+            return res.send({ fileUrl: result.Location, message: 'Vidéo uploadée avec succès sur S3' });
+        } catch (error) {
+            console.error('Erreur lors de l\'upload sur S3:', error);
+            return res.status(500).send('Erreur lors de l\'upload');
+        }
+    } else {
+        return res.send({ fileUrl: `/uploads/videos/${req.file.filename}`, message: 'Vidéo uploadée localement' });
+    }
+});
+
+// Route pour supprimer un fichier de S3 ou localement
+app.delete('/file/:key', async (req, res) => {
+    const { key } = req.params;
+    if (useS3) {
+        try {
+            const params = { Bucket: process.env.S3_BUCKET_NAME, Key: key };
+            const data = await s3.deleteObject(params).promise();
+            console.log('Fichier supprimé de S3:', data);
+            return res.send('Fichier supprimé avec succès de S3');
+        } catch (error) {
+            console.error('Erreur lors de la suppression sur S3:', error);
+            return res.status(500).send('Erreur lors de la suppression du fichier');
+        }
+    } else {
+        const filePath = path.join(__dirname, 'public', 'uploads', key);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            return res.send('Fichier supprimé localement');
+        } else {
+            return res.status(404).send('Fichier non trouvé');
+        }
+    }
+});
+
+
+// Middleware pour gérer les routes non trouvées (404)
+app.use((req, res) => {
+    res.status(404).send('Page non trouvée');
+});
+
+// Middleware global pour la gestion des erreurs (500)
+app.use((err, req, res, next) => {
+    console.error('Error stack:', err.stack);
+    res.status(500).send(`Something broke! ${err.message}`);
+});
+
+// Lancer le serveur
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+    fetchRSSFeeds('https://news.google.com/rss/search?q=immobilier&hl=fr&gl=FR&ceid=FR:fr')
+        .then(() => console.log('RSS Feeds fetched successfully'))
+        .catch(error => console.error('Erreur lors de la récupération du flux RSS:', error));
+});
+
+export default app;
